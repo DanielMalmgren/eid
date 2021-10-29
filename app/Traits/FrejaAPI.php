@@ -29,9 +29,9 @@ trait FrejaAPI {
         $parameterJson = base64_encode(json_encode($parameterArray));
 
         $url = self::$baseurl . "initAdd";
-        $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtolower($user->organization);
+        $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($user->organization), "åäö", "aao");
         $content = "initAddOrganisationIdRequest=" . $parameterJson . $relyingPartyId;
-
+logger($relyingPartyId);
         $response = $this->makePostRequest($url, $content);
 
         $responseCollection = $response->collect();

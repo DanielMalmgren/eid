@@ -38,6 +38,7 @@
                     Ditt tjänste-ID kommer att ha följande uppgifter:<br>
                     Namn: {{$user->name}}<br>
                     Användarnamn: {{$user->username}}<br>
+                    Kommun: {{$user->organization}}<br>
                     Titel: {{$user->title}}<br><br>
 
                     <a href="/orgid?username={{$user->username}}" class="btn btn-primary">Aktivera tjänste-ID</a>
