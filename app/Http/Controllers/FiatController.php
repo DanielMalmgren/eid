@@ -29,7 +29,6 @@ class FiatController extends Controller
                 break;
             }
         }
-        $hasOrgId = false;        
 
         $data = [
             'user' => $user,
