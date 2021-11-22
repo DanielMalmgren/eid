@@ -9,18 +9,19 @@
                 <div class="card">
                     <div class="card-body">
 
-                        För att aktivera tjänste-ID åt någon annan
-                        ange användarnamn nedan.<br><br>
+                        Ange användarnamn nedan.<br><br>
 
                         <form method="post" action="{{action('HomeController@index')}}" accept-charset="UTF-8">
                             @csrf
 
                             <div class="mb-3">
-                                <input name="username" maxlength="10" class="form-control">
+                                <input id="username" name="username" maxlength="10" class="form-control">
                             </div>
 
-                            <button class="btn btn-primary" type="submit">Skicka</button>
+                            <button class="btn btn-primary" type="submit">Aktivera tjänste-ID</button>
+                            <a href="#" class="btn btn-primary" onclick="fiat()">Autentisera användare</a>
                         </form>
+
 
                     </div>
                 </div>
@@ -48,4 +49,14 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    function fiat() {
+        var username=document.getElementById("username").value;
+        window.location='/fiat/'+username;
+    }
+
+</script>
+
 @endsection
