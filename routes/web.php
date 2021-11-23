@@ -15,12 +15,14 @@ use Illuminate\Support\Facades\Route;
 
 //Auth::routes();
 
-Route::get('/',                     'HomeController@index');
-Route::post('/',                    'HomeController@index');
-Route::get('/orgid',                'HomeController@orgid');
-Route::get('/orgidResult',          'HomeController@orgidResult');
-Route::get('logout',                'HomeController@logout');
+Route::get('/',                                 'HomeController@index');
+Route::post('/',                                'HomeController@index');
+Route::get('/orgid',                            'HomeController@orgid');
+Route::get('/orgidResult',                      'HomeController@orgidResult');
+Route::get('logout',                            'HomeController@logout');
 
-Route::get('/fiat/{targetuser}',    'FiatController@auth');
-Route::get('/fiat/orgIdAuthAjax/{targetuser}',    'FiatController@orgIdAuthAjax');
-Route::get('/fiat/result/{authRef}',    'FiatController@result');
+Route::get('/fiat/{targetuser}',                'FiatController@auth');
+Route::get('/fiat/orgIdStartAuth/{targetuser}', 'FiatController@orgIdStartAuth');
+Route::get('/fiat/orgIdAuthResult/{authRef}',   'FiatController@orgIdAuthResult');
+Route::get('/fiat/eIdStartAuth/{targetuser}',   'FiatController@eIdStartAuth');
+Route::get('/fiat/eIdAuthResult/{authRef}',     'FiatController@eIdAuthResult');

@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Http;
 trait FrejaAPI {
 
     static $baseurl_management = "https://services.prod.frejaeid.com/organisation/management/orgId/1.0/";
-    static $baseurl_auth = "https://services.prod.frejaeid.com/organisation/authentication/1.0/";
+    static $baseurl_orgauth = "https://services.prod.frejaeid.com/organisation/authentication/1.0/";
+    static $baseurl_eauth = "https://services.prod.frejaeid.com/authentication/1.0/";
 
     public function checkForOrgId(User $user) {
         logger("Kontrollerar om ".$user->name." har org-id.");
@@ -23,29 +24,52 @@ trait FrejaAPI {
         return $response->body();
     }
 
-    public function authResult(String $authRef, String $organization) {
+    public function eIdAuthResultBackend(String $authRef) {
         logger("Kollar status för autentisering med referens ".$authRef.".");
 
         $ref = array('authRef'=>$authRef);
         $refB64 = base64_encode(json_encode($ref));
 
-        $url = self::$baseurl_auth . "getOneResult";
+        $url = self::$baseurl_eauth . "getOneResult";
+        $relyingPartyId = "&relyingPartyId=id_itsam01_itsam";
+        $content = "getOneAuthResultRequest=" . $refB64 . $relyingPartyId;
+        $response = $this->makePostRequest($url, $content);
+
+        $responseCollection = $response->collect();
+
+        if($responseCollection["status"] == "APPROVED" &&
+            $responseCollection["requestedAttributes"]["registrationLevel"] != 'PLUS') {
+                $responseCollection["status"] = "APPROVED_NOPLUS";
+        }
+
+        if(isset($responseCollection['status'])) {
+            return $responseCollection['status'];
+        } else {
+            return null;
+        }
+    }
+
+    public function orgIdAuthResultBackend(String $authRef, String $organization) {
+        logger("Kollar status för autentisering med referens ".$authRef.".");
+
+        $ref = array('authRef'=>$authRef);
+        $refB64 = base64_encode(json_encode($ref));
+
+        $url = self::$baseurl_orgauth . "getOneResult";
         $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($organization), "åäö", "aao");
         $content = "getOneAuthResultRequest=" . $refB64 . $relyingPartyId;
         $response = $this->makePostRequest($url, $content);
 
         $responseCollection = $response->collect();
 
-        logger(print_r($responseCollection, true));
-
         if(isset($responseCollection)) {
-            return  $responseCollection['status'];
+            return $responseCollection['status'];
         } else {
             return null;
         }
     }
 
-    public function initOrgidAuthentication(User $user) {
+    public function initOrgidAuthenticationBackend(User $user) {
         logger("Startar org-id-autentisering för ".$user->name.".");
 
         $userInfo = array("country"=>"SE", "ssn"=>$user->personid);
@@ -54,17 +78,39 @@ trait FrejaAPI {
         $parameterArray = array("userInfo"=>$userInfoB64, "userInfoType"=>"SSN");
         $parameterJson = base64_encode(json_encode($parameterArray));
 
-        $url = self::$baseurl_auth . "init";
+        $url = self::$baseurl_orgauth . "init";
         $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($user->organization), "åäö", "aao");
         $content = "initAuthRequest=" . $parameterJson . $relyingPartyId;
         $response = $this->makePostRequest($url, $content);
 
         $responseCollection = $response->collect();
 
-        logger(print_r($responseCollection, true));
+        if(isset($responseCollection)) {
+            return $responseCollection['authRef'];
+        } else {
+            return null;
+        }
+    }
+
+    public function initeidAuthenticationBackend(User $user) {
+        logger("Startar eid-autentisering för ".$user->name.".");
+
+        $userInfo = array("country"=>"SE", "ssn"=>$user->personid);
+        $userInfoB64 = base64_encode(json_encode($userInfo));
+
+        $attributesToReturn = array(array("attribute"=>"REGISTRATION_LEVEL"));
+        $parameterArray = array("userInfo"=>$userInfoB64, "userInfoType"=>"SSN", "attributesToReturn"=>$attributesToReturn);
+        $parameterJson = base64_encode(json_encode($parameterArray));
+
+        $url = self::$baseurl_eauth . "initAuthentication";
+        $relyingPartyId = "&relyingPartyId=id_itsam01_itsam";
+        $content = "initAuthRequest=" . $parameterJson . $relyingPartyId;
+        $response = $this->makePostRequest($url, $content);
+
+        $responseCollection = $response->collect();
 
         if(isset($responseCollection)) {
-            return  $responseCollection['authRef'];
+            return $responseCollection['authRef'];
         } else {
             return null;
         }

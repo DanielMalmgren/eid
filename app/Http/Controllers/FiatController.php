@@ -18,7 +18,6 @@ class FiatController extends Controller
     public function auth(Request $request, String $targetuser)
     {
         $user = new User($targetuser);
-
         $response = $this->checkForOrgId($user);
 
         $hasOrgId = false;
@@ -38,12 +37,21 @@ class FiatController extends Controller
         return view('fiat.auth')->with($data);
     }
 
-    public function result(Request $request, String $authRef) {
-        return $this->authResult($authRef, $request->organization);
+    public function orgIdAuthResult(Request $request, String $authRef) {
+        return $this->orgIdAuthResultBackend($authRef, $request->organization);
     }
 
-    public function orgIdAuthAjax(Request $request, String $targetuser) {
+    public function orgIdStartAuth(Request $request, String $targetuser) {
         $user = new User($targetuser);
-        return $this->initOrgidAuthentication($user);
+        return $this->initOrgidAuthenticationBackend($user);
+    }
+
+    public function eIdAuthResult(Request $request, String $authRef) {
+        return $this->eIdAuthResultBackend($authRef);
+    }
+
+    public function eIdStartAuth(Request $request, String $targetuser) {
+        $user = new User($targetuser);
+        return $this->initeidAuthenticationBackend($user);
     }
 }

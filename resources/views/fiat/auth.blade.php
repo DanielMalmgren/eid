@@ -18,11 +18,10 @@
                     Titel: {{$user->title}}<br><br>
 
                     @if($hasOrgId)
-                        <a href="#" onClick="auth()" class="btn btn-primary">Autentisera med tjänste-ID</a>
+                        <a href="#" onClick="auth('org')" class="btn btn-primary">Autentisera med tjänste-ID</a>
                     @else
                         Användaren saknar tjänste-id för {{$user->organization}}!<br>
-                        <a href="#" onClick="auth()" class="btn btn-primary disabled">Autentisera med Freja eID+</a><br>
-                        (Inte färdig med denna funktion än. Men den funkar för tjänste-ID! /Daniel)
+                        <a href="#" onClick="auth('e')" class="btn btn-primary">Autentisera med Freja eID+</a>
                     @endif
 
                     <br><br>
@@ -37,22 +36,22 @@
 
 <script type="text/javascript">
 
-    function auth() {
+    function auth(org) {
         $.ajax({
-            url: '/fiat/orgIdAuthAjax/{{$user->username}}',
+            url: '/fiat/'+org+'IdStartAuth/{{$user->username}}',
             dataType:"text",
             type: 'GET',
             success: function (data) {
                 $('#result').html("Väntar på autentisering...");
                 $('#result').css('color', 'black');
-                authResult(data);
+                authResult(data, org);
             },
         });
     }
 
-    function authResult(authRef) {
+    function authResult(authRef, org) {
         $.ajax({
-            url: '/fiat/result/'+authRef+'?organization={{$user->organization}}',
+            url: '/fiat/'+org+'IdAuthResult/'+authRef+'?organization={{$user->organization}}',
             dataType:"text",
             type: 'GET',
             success: function(data) {
@@ -69,8 +68,12 @@
                         $('#result').css('color', 'red');
                         break;
                     case "APPROVED":
-                        $('#result').html("Autentiseringen är godkänd!");
+                        $('#result').html("Autentiseringen är godkänd.");
                         $('#result').css('color', 'green');
+                        break;
+                    case "APPROVED_NOPLUS":
+                        $('#result').html("Autentiseringen är godkänd!<br>Användaren har dock inte uppgraderat sitt eID till PLUS!");
+                        $('#result').css('color', 'red');
                         break;
                     default:
                         $('#result').html("Oväntat fel!");
@@ -78,7 +81,7 @@
                         break;
                 }
                 if(again) {
-                    setTimeout(authResult,2000,authRef);
+                    setTimeout(authResult,2000,authRef, org);
                 }
             },
             error: function() {
