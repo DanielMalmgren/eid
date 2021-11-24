@@ -26,3 +26,5 @@ Route::get('/fiat/orgIdStartAuth/{targetuser}', 'FiatController@orgIdStartAuth')
 Route::get('/fiat/orgIdAuthResult/{authRef}',   'FiatController@orgIdAuthResult');
 Route::get('/fiat/eIdStartAuth/{targetuser}',   'FiatController@eIdStartAuth');
 Route::get('/fiat/eIdAuthResult/{authRef}',     'FiatController@eIdAuthResult');
+
+Route::get('/statistics',                       'StatisticsController@index');

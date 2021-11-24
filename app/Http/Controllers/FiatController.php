@@ -18,20 +18,10 @@ class FiatController extends Controller
     public function auth(Request $request, String $targetuser)
     {
         $user = new User($targetuser);
-        $response = $this->checkForOrgId($user);
-
-        $hasOrgId = false;
-        foreach (json_decode($response)->userInfos as $userinfo)
-        {
-            if($userinfo->organisationId->identifier == $user->username) {
-                $hasOrgId = true;
-                break;
-            }
-        }
 
         $data = [
             'user' => $user,
-            'hasOrgId' => $hasOrgId,
+            'hasOrgId' => $this->checkForOrgId($user),
         ];
 
         return view('fiat.auth')->with($data);

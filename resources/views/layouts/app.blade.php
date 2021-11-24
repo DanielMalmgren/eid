@@ -48,8 +48,8 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/statistics">Statistik</a>
                                     <a class="dropdown-item" href="/logout">Logga ut</a>
-
                                 </div>
                             </li>
                         @endif

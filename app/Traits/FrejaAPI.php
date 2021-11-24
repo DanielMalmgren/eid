@@ -11,17 +11,33 @@ trait FrejaAPI {
     static $baseurl_orgauth = "https://services.prod.frejaeid.com/organisation/authentication/1.0/";
     static $baseurl_eauth = "https://services.prod.frejaeid.com/authentication/1.0/";
 
+    public function getOrgidsPerOrganization(String $organization) {
+        logger("Hämtar alla org-ids för ".$organization.".");
+
+        $url = self::$baseurl_management . "users/getAll";
+        $relyingPartyId = "relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($organization), "åäö", "aao");
+
+        $response = $this->makePostRequest($url, $relyingPartyId);
+
+        return json_decode($response)->userInfos;
+    }
+
     public function checkForOrgId(User $user) {
         logger("Kontrollerar om ".$user->name." har org-id.");
 
         $url = self::$baseurl_management . "users/getAll";
-        $relyingPartyId = "relyingPartyId=id_itsam01_" . strtolower($user->organization);
-
-        //$content = "getOneOrganisationIdResultRequest=" . $parameterJson . $relyingPartyId;
+        $relyingPartyId = "relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($user->organization), "åäö", "aao");
 
         $response = $this->makePostRequest($url, $relyingPartyId);
 
-        return $response->body();
+        foreach (json_decode($response)->userInfos as $userinfo)
+        {
+            if($userinfo->organisationId->identifier == $user->username) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function eIdAuthResultBackend(String $authRef) {
