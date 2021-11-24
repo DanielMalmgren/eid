@@ -165,6 +165,20 @@ trait FrejaAPI {
         }
     }
 
+    public function removeOrgId(String $username, String $organization) {
+        logger("Raderar org-id för ".$username.".");
+
+        $parameterArray = array(
+            "identifier" => $username,
+        );
+        $parameterJson = base64_encode(json_encode($parameterArray));
+
+        $url = self::$baseurl_management . "delete";
+        $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($organization), "åäö", "aao");
+        $content = "deleteOrganisationIdRequest=" . $parameterJson . $relyingPartyId;
+        $this->makePostRequest($url, $content);
+    }
+
     public function getOneResult(User $user, String $reference) {
         $parameterArray = array(
             "orgIdRef" => $reference
