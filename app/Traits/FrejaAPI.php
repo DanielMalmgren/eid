@@ -12,7 +12,7 @@ trait FrejaAPI {
     static $baseurl_eauth = "https://services.prod.frejaeid.com/authentication/1.0/";
 
     public function getOrgidsPerOrganization(String $organization) {
-        logger("Hämtar alla org-ids för ".$organization.".");
+        //logger("Hämtar alla org-ids för ".$organization.".");
 
         $url = self::$baseurl_management . "users/getAll";
         $relyingPartyId = "relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($organization), "åäö", "aao");
@@ -133,7 +133,7 @@ trait FrejaAPI {
     }
 
     public function addOrgId(User $user) {
-        logger("Skapar org-id för ".$user->name.".");
+        logger("Skapar org-id för ".$user->name." (".$user->organization.").");
 
         $userInfo = array("country"=>"SE", "ssn"=>$user->personid);
         $userInfoB64 = base64_encode(json_encode($userInfo));
@@ -154,7 +154,6 @@ trait FrejaAPI {
         $url = self::$baseurl_management . "initAdd";
         $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($user->organization), "åäö", "aao");
         $content = "initAddOrganisationIdRequest=" . $parameterJson . $relyingPartyId;
-        logger("Relaying Party ID: ".$relyingPartyId);
         $response = $this->makePostRequest($url, $content);
 
         $responseCollection = $response->collect();

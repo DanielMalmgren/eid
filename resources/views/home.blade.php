@@ -32,15 +32,13 @@
                 <div class="card-header">Välkommen till Itsams aktivering av digitalt tjänste-ID!</div>
 
                 <div class="card-body">
-
-                    För att gå vidare behöver du ha ett Freja eID+.<br>
-                    Om du har det, klicka på "Aktivera tjänste-ID" nedan.<br><br>
-
-                    Ditt tjänste-ID kommer att ha följande uppgifter:<br>
+                    Ditt tjänste-ID kommer att få följande uppgifter:<br>
                     Namn: {{$user->name}}<br>
                     Användarnamn: {{$user->username}}<br>
                     Kommun: {{$user->organization}}<br>
                     Titel: {{$user->title}}<br><br>
+
+                    Om dessa uppgifter är korrekta, klicka på knappen nedan!<br><br>
 
                     <a href="/orgid?username={{$user->username}}" class="btn btn-primary">Aktivera tjänste-ID</a>
 
