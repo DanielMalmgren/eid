@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Traits\FrejaAPI;
 use LdapRecord\Models\ActiveDirectory\User;
 use LdapRecord\Models\Attributes\AccountControl;
+use LdapRecord\Models\ActiveDirectory\Group;
 
 class FrejaPurgeOldOrgIds extends Command
 {
@@ -42,25 +43,25 @@ class FrejaPurgeOldOrgIds extends Command
      */
     public function handle()
     {
-        $organizations = collect([
-            'Kinda',
-            'Boxholm',
-            'Ödeshög',
-            'Ydre',
-            'Åtvidaberg',
-            'Vimmerby',
-            'Itsam',
-        ]);
+        logger("Genomför rensning av tjänste-ID");
+        $orgGroups  = json_decode(env('ORG_GROUPS'), true);
 
-        foreach($organizations as $organization) {
-            $this->info('Checking '.$organization.'.');
+        foreach($orgGroups as $organization => $group) {
+            $orgGroup = Group::find($group);
+            $this->info('Checking '.$organization.'...');
             $orgids = $this->getOrgidsPerOrganization($organization);
             foreach($orgids as $orgid) {
                 $username = $orgid->organisationId->identifier;
                 $this->info('    '.$username);
                 $aduser = User::where('sAMAccountName', $username)->first();
                 if($aduser === null) {
-                    $this->info("FINNS INTE!");
+                    $this->info("        FINNS INTE!");
+                    $this->removeOrgId($username, $organization);
+                    continue;
+                }
+
+                if(!$aduser->groups()->exists($orgGroup)) {
+                    $this->info("        Finns inte i rätt kommun");
                     $this->removeOrgId($username, $organization);
                     continue;
                 }
@@ -70,7 +71,7 @@ class FrejaPurgeOldOrgIds extends Command
                 );
                 
                 if ($uac->has(AccountControl::ACCOUNTDISABLE)) {
-                    $this->info("INAKTIVERAD!");
+                    $this->info("        INAKTIVERAD!");
                     $this->removeOrgId($username, $organization);
                     continue;
                 }

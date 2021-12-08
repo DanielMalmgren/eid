@@ -28,7 +28,6 @@ class StatisticsController extends Controller
         foreach($organizations as $organization => $amount) {
             $organizations[$organization] = count($this->getOrgidsPerOrganization($organization));
         }
-        logger(print_r($organizations, true));
 
         $data = [
             'organizations' => $organizations,
