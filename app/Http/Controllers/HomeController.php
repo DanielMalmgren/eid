@@ -38,10 +38,12 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $user = $this->getUser($request);
+        $user = session()->get('user');
+        $asuser = $this->getUser($request);
 
         $data = [
             'user' => $user,
+            'asuser' => $asuser,
         ];
 
         return view('home')->with($data);
@@ -55,9 +57,18 @@ class HomeController extends Controller
 
     public function orgid(Request $request)
     {
-        $user = $this->getUser($request);
+        $user = session()->get('user');
+        $asuser = $this->getUser($request);
 
-        $reference = $this->addOrgId($user);
+        if($request->has('title')) {
+            $asuser->title = $request->title;
+        }
+
+        if($request->has('organization')) {
+            $asuser->organization = $request->organization;
+        }
+
+        $reference = $this->addOrgId($asuser);
 
         if($reference === null) {
             return view('orgid/failure');
@@ -65,6 +76,7 @@ class HomeController extends Controller
 
         $data = [
             'user' => $user,
+            'asuser' => $asuser,
             'reference' => $reference,
         ];
 
@@ -72,8 +84,6 @@ class HomeController extends Controller
     }
 
     public function orgidResult(Request $request) {
-        $user = $this->getUser($request);
-        $reference = $request->reference;
-        return $this->getOneResult($user, $reference);
+        return $this->getOneResult($request->organization, $request->reference);
     }
 }

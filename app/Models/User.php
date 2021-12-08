@@ -8,6 +8,7 @@ class User
     public $username;
     public $title;
     public $organization;
+    public $organizations;
     public $personid;
     public $isAdmin;
 
@@ -23,7 +24,16 @@ class User
             $this->organization = $aduser->company[0];
             $this->personid = $aduser->employeeID[0];
             $this->isAdmin = $aduser->groups()->recursive()->exists($adgroup);
+
+            $this->organizations = [];
+            $orgGroups  = json_decode(env('ORG_GROUPS'), true);
+            $groups = $aduser->groups();
+            foreach($orgGroups as $org => $group) {
+                $orgGroup = \LdapRecord\Models\ActiveDirectory\Group::find($group);
+                if($groups->exists($orgGroup)) {
+                    $this->organizations[] = $org;
+                }
+            }
         }
     }
-
 }

@@ -178,14 +178,14 @@ trait FrejaAPI {
         $this->makePostRequest($url, $content);
     }
 
-    public function getOneResult(User $user, String $reference) {
+    public function getOneResult(String $organization, String $reference) {
         $parameterArray = array(
             "orgIdRef" => $reference
         );
         $parameterJson = base64_encode(json_encode($parameterArray));
 
         $url = self::$baseurl_management . "getOneResult";
-        $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtolower($user->organization);
+        $relyingPartyId = "&relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($organization), "åäö", "aao");
         $content = "getOneOrganisationIdResultRequest=" . $parameterJson . $relyingPartyId;
 
         $response = $this->makePostRequest($url, $content);

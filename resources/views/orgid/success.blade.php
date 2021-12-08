@@ -8,11 +8,10 @@
 
         function poll() {
             $.ajax({
-                url: '/orgidResult?reference={{$reference}}&username={{$user->username}}',
+                url: '/orgidResult?reference={{$reference}}&organization={{$asuser->organization}}',
                 dataType:"json",
                 type: 'GET',
                 success: function(data) {
-                    console.log(data.status);
                     var again = false;
                     switch(data.status) {
                         case "STARTED":
