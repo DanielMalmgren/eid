@@ -157,9 +157,15 @@ trait FrejaAPI {
         $response = $this->makePostRequest($url, $content);
 
         $responseCollection = $response->collect();
-        if(isset($responseCollection)) {
-            return  $responseCollection['orgIdRef'];
+        if(isset($responseCollection) && isset($responseCollection['orgIdRef'])) {
+            return $responseCollection['orgIdRef'];
         } else {
+            logger("initAdd failed!");
+            logger("Content sent: ".$content);
+            logger("Response:");
+            logger(print_r($response, true));
+            logger("User object:");
+            logger(print_r($user, true));
             return null;
         }
     }

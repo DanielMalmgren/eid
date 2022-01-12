@@ -8,7 +8,7 @@
                 <div class="card-header">Aktivering misslyckades!</div>
                 <div class="card-body">
                     Någonting gick fel.<br>
-                    Verifiera att du verkligen har Freja eID+.<br>
+                    Kontakta Itsam Servicedesk så ska vi försöka lösa problemet!<br>
                 </div>
             </div>
         </div>
