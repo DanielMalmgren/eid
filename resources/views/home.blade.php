@@ -36,7 +36,7 @@
                     <form method="post" action="{{action('HomeController@orgid')}}" accept-charset="UTF-8">
                         @csrf
 
-                        <input type="hidden" name="username" value="{{$user->username}}">
+                        <input type="hidden" name="username" value="{{$asuser->username}}">
 
                         Ditt tjänste-ID kommer att få följande uppgifter:<br>
                         Namn: {{$asuser->name}}<br>

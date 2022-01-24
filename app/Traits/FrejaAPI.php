@@ -101,9 +101,15 @@ trait FrejaAPI {
 
         $responseCollection = $response->collect();
 
-        if(isset($responseCollection)) {
+        if(isset($responseCollection) && isset($responseCollection['authRef'])) {
             return $responseCollection['authRef'];
         } else {
+            logger("init failed!");
+            logger("Content sent: ".$content);
+            logger("Response:");
+            logger(print_r($response, true));
+            logger("User object:");
+            logger(print_r($user, true));
             return null;
         }
     }
@@ -125,9 +131,15 @@ trait FrejaAPI {
 
         $responseCollection = $response->collect();
 
-        if(isset($responseCollection)) {
+        if(isset($responseCollection) && isset($responseCollection['authRef'])) {
             return $responseCollection['authRef'];
         } else {
+            logger("initAuthentication failed!");
+            logger("Content sent: ".$content);
+            logger("Response:");
+            logger(print_r($response, true));
+            logger("User object:");
+            logger(print_r($user, true));
             return null;
         }
     }
