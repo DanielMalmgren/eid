@@ -20,7 +20,7 @@ class User
         $this->username = $username;
         if(isset($aduser)) {
             $this->name = $aduser->displayName[0];
-            $this->title = substr($aduser->title[0], 0, 22);
+            $this->title = mb_substr($aduser->title[0], 0, 22);
             $this->organization = $aduser->company[0];
             $this->personid = $aduser->employeeID[0];
             $this->isAdmin = $aduser->groups()->recursive()->exists($adgroup);
