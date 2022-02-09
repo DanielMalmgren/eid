@@ -41,8 +41,6 @@ trait FrejaAPI {
     }
 
     public function eIdAuthResultBackend(String $authRef) {
-        logger("Kollar status för autentisering med referens ".$authRef.".");
-
         $ref = array('authRef'=>$authRef);
         $refB64 = base64_encode(json_encode($ref));
 
@@ -66,8 +64,6 @@ trait FrejaAPI {
     }
 
     public function orgIdAuthResultBackend(String $authRef, String $organization) {
-        logger("Kollar status för autentisering med referens ".$authRef.".");
-
         $ref = array('authRef'=>$authRef);
         $refB64 = base64_encode(json_encode($ref));
 
