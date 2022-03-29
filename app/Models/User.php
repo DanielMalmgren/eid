@@ -40,6 +40,10 @@ class User
                     $this->organizations[] = $org;
                 }
             }
+
+            if(count($this->organizations) == 0) {
+                logger("Användaren ".$username." saknar grupp för kommuntillhörighet!");
+            }
         }
     }
 }

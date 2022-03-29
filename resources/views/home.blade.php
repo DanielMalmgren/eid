@@ -33,53 +33,57 @@
 
                 <div class="card-body">
 
-                    <form method="post" action="{{action('HomeController@orgid')}}" accept-charset="UTF-8">
-                        @csrf
+                    @if (count($asuser->organizations) > 0)
+                        <form method="post" action="{{action('HomeController@orgid')}}" accept-charset="UTF-8">
+                            @csrf
 
-                        <input type="hidden" name="username" value="{{$asuser->username}}">
+                            <input type="hidden" name="username" value="{{$asuser->username}}">
 
-                        Ditt tjänste-ID kommer att få följande uppgifter:<br>
-                        Namn: {{$asuser->name}}<br>
-                        Användarnamn: {{$asuser->username}}<br>
+                            Ditt tjänste-ID kommer att få följande uppgifter:<br>
+                            Namn: {{$asuser->name}}<br>
+                            Användarnamn: {{$asuser->username}}<br>
 
-                        @if (count($asuser->organizations) === 1)
-                            Kommun: {{$asuser->organizations[0]}}<br>
-                            <input type="hidden" name="organization" value="{{$asuser->organizations[0]}}">
-                        @else
-                            <div class="form-row">
-                                <div class="col-2">
-                                    <label>Kommun:</label>
+                            @if (count($asuser->organizations) === 1)
+                                Kommun: {{$asuser->organizations[0]}}<br>
+                                <input type="hidden" name="organization" value="{{$asuser->organizations[0]}}">
+                            @else
+                                <div class="form-row">
+                                    <div class="col-2">
+                                        <label>Kommun:</label>
+                                    </div>
+                                    <div class="col-4">
+                                        <select class="form-control form-control-sm" name="organization" required="">
+                                            @foreach($asuser->organizations as $organization)
+                                                <option>{{$organization}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="col-4">
-                                    <select class="form-control form-control-sm" name="organization" required="">
-                                        @foreach($asuser->organizations as $organization)
-                                            <option>{{$organization}}</option>
-                                        @endforeach
-                                    </select>
+                            @endif
+
+                            @if($user->isAdmin)
+                                <div class="form-row">
+                                    <div class="col-1">
+                                        <label>Titel:</label>
+                                    </div>
+                                    <div class="col-4">
+                                        <input required minlength="5" name="title" maxlength="22" class="form-control form-control-sm" value="{{$asuser->title}}">
+                                    </div>
                                 </div>
-                            </div>
-                        @endif
+                            @else
+                                Titel: {{$user->title}}<br><br>
+                                <input type="hidden" name="title" value="{{$asuser->title}}">
+                            @endif
 
-                        @if($user->isAdmin)
-                            <div class="form-row">
-                                <div class="col-1">
-                                    <label>Titel:</label>
-                                </div>
-                                <div class="col-4">
-                                    <input required minlength="5" name="title" maxlength="22" class="form-control form-control-sm" value="{{$asuser->title}}">
-                                </div>
-                            </div>
-                        @else
-                            Titel: {{$user->title}}<br><br>
-                            <input type="hidden" name="title" value="{{$asuser->title}}">
-                        @endif
+                            <br>
 
-                        <br>
+                            Om dessa uppgifter är korrekta, klicka på knappen nedan!<br><br>
 
-                        Om dessa uppgifter är korrekta, klicka på knappen nedan!<br><br>
-
-                        <button class="btn btn-primary" type="submit">Aktivera tjänste-ID</button>
-                    </form>
+                            <button class="btn btn-primary" type="submit">Aktivera tjänste-ID</button>
+                        </form>
+                    @else
+                        Kommuntillhörighet saknas!<br>
+                    @endif
 
                 </div>
             </div>
