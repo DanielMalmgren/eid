@@ -20,7 +20,13 @@ class User
         $this->username = $username;
         if(isset($aduser)) {
             $this->name = $aduser->displayName[0];
-            $this->title = mb_substr($aduser->title[0], 0, 22);
+
+            if(isset($aduser->title)) {
+                $this->title = mb_substr($aduser->title[0], 0, 22);
+            } else {
+                $this->title = "Fel på titel";
+                logger("Missing title for user ".$username);
+            }
             $this->organization = $aduser->company[0];
             $this->personid = $aduser->employeeID[0];
             $this->isAdmin = $aduser->groups()->recursive()->exists($adgroup);
