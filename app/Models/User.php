@@ -43,6 +43,10 @@ class User
 
             if(count($this->organizations) == 0) {
                 logger("Användaren ".$username." saknar grupp för kommuntillhörighet!");
+                logger("Följande grupper har hittats:");
+                foreach($groups->get() as $group) {
+                    logger("   ".$group->getName());
+                }
             }
         }
     }
