@@ -27,7 +27,7 @@ class User
                 $this->title = "Fel på titel";
                 logger("Missing title for user ".$username);
             }
-            $this->organization = $aduser->company[0];
+            //$this->organization = $aduser->company[0];
             $this->personid = $aduser->employeeID[0];
             $this->isAdmin = $aduser->groups()->recursive()->exists($adgroup);
 
