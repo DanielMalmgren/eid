@@ -26,15 +26,21 @@ trait FrejaAPI {
         logger("Kontrollerar om ".$user->name." har org-id.");
 
         $url = self::$baseurl_management . "users/getAll";
-        $relyingPartyId = "relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($user->organization), "åäö", "aao");
 
-        $response = $this->makePostRequest($url, $relyingPartyId);
+        foreach($user->organizations as $organization) {
 
-        foreach (json_decode($response)->userInfos as $userinfo)
-        {
-            if($userinfo->organisationId->identifier == $user->username) {
-                return true;
+            $relyingPartyId = "relyingPartyId=id_itsam01_" . strtr_utf8(mb_strtolower($organization), "åäö", "aao");
+
+            $response = $this->makePostRequest($url, $relyingPartyId);
+
+            foreach (json_decode($response)->userInfos as $userinfo)
+            {
+                if($userinfo->organisationId->identifier == $user->username) {
+                    $user->organization = $organization;
+                    return true;
+                }
             }
+
         }
 
         return false;
