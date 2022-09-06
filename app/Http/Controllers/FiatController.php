@@ -17,11 +17,18 @@ class FiatController extends Controller
 
     public function auth(Request $request, String $targetuser)
     {
+        $hasOrgId=null;
         $user = new User($targetuser);
+        if(isset($user) && isset($user->name)) {
+            logger(print_r($user, true));
+            $hasOrgId = $this->checkForOrgId($user);
+        } else {
+            logger("Trying to auth non existing user: ".$targetuser);
+        }
 
         $data = [
             'user' => $user,
-            'hasOrgId' => $this->checkForOrgId($user),
+            'hasOrgId' => $hasOrgId,
         ];
 
         return view('fiat.auth')->with($data);

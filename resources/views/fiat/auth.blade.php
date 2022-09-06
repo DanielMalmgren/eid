@@ -10,23 +10,27 @@
 
                 <div class="card-body">
 
-                    Du kommer att utföra en autentisering mot nedanstående användare:<br><br>
+                    @if(isset($user) && isset($user->name))
+                        Du kommer att utföra en autentisering mot nedanstående användare:<br><br>
 
-                    Namn: {{$user->name}}<br>
-                    Användarnamn: {{$user->username}}<br>
-                    Kommun: {{$user->organization}}<br>
-                    Titel: {{$user->title}}<br><br>
+                        Namn: {{$user->name}}<br>
+                        Användarnamn: {{$user->username}}<br>
+                        Kommun: {{$user->organization}}<br>
+                        Titel: {{$user->title}}<br><br>
 
-                    @if($hasOrgId)
-                        <a href="#" onClick="auth('org')" class="btn btn-primary">Autentisera med tjänste-ID</a>
+                        @if($hasOrgId)
+                            <a href="#" onClick="auth('org')" class="btn btn-primary">Autentisera med tjänste-ID</a>
+                        @else
+                            Användaren saknar tjänste-id för {{$user->organization}}!<br>
+                            <a href="#" onClick="auth('e')" class="btn btn-primary">Autentisera med Freja eID+</a>
+                        @endif
+
+                        <br><br>
+
+                        <div style="font-size:x-large" id="result"></div>
                     @else
-                        Användaren saknar tjänste-id för {{$user->organization}}!<br>
-                        <a href="#" onClick="auth('e')" class="btn btn-primary">Autentisera med Freja eID+</a>
+                        Du har försökt utföra autentisering på {{$user->username}} som inte existerar!
                     @endif
-
-                    <br><br>
-
-                    <div style="font-size:x-large" id="result"></div>
 
                 </div>
             </div>
