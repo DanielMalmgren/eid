@@ -40,6 +40,7 @@ class FiatController extends Controller
 
     public function orgIdStartAuth(Request $request, String $targetuser) {
         $user = new User($targetuser);
+        $user->organization = $user->organizations[0];
         return $this->initOrgidAuthenticationBackend($user);
     }
 
