@@ -34,7 +34,7 @@ class User
             $this->organizations = [];
             $orgGroups  = json_decode(env('ORG_GROUPS'), true);
             $groups = $aduser->groups();
-            foreach($orgGroups as $org => $group) {
+            foreach($orgGroups as $group => $org) {
                 $orgGroup = \LdapRecord\Models\ActiveDirectory\Group::find($group);
                 if($groups->exists($orgGroup)) {
                     $this->organizations[] = $org;

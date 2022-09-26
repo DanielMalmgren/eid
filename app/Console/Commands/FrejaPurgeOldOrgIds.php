@@ -46,7 +46,7 @@ class FrejaPurgeOldOrgIds extends Command
         logger("Genomför rensning av tjänste-ID");
         $orgGroups  = json_decode(env('ORG_GROUPS'), true);
 
-        foreach($orgGroups as $organization => $group) {
+        foreach($orgGroups as $group => $organization) {
             $orgGroup = Group::find($group);
             $this->info('Checking '.$organization.'...');
             $orgids = $this->getOrgidsPerOrganization($organization);
