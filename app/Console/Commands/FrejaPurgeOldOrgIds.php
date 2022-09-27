@@ -50,7 +50,7 @@ class FrejaPurgeOldOrgIds extends Command
             $orgGroup = Group::find($group);
             $this->info('Checking '.$organization.'...');
             $orgids = $this->getOrgidsPerOrganization($organization);
-            foreach($orgids as $orgid) {
+            /*foreach($orgids as $orgid) {
                 $username = $orgid->organisationId->identifier;
                 $this->info('    '.$username);
                 $aduser = User::where('sAMAccountName', $username)->first();
@@ -76,7 +76,7 @@ class FrejaPurgeOldOrgIds extends Command
                     continue;
                 }
 
-            }
+            }*/
         }
 
         return Command::SUCCESS;
