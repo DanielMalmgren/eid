@@ -50,7 +50,7 @@ class FrejaPurgeOldOrgIds extends Command
             $orgGroup = Group::find($group);
             $this->info('Checking '.$organization.'...');
             $orgids = $this->getOrgidsPerOrganization($organization);
-            /*foreach($orgids as $orgid) {
+            foreach($orgids as $orgid) {
                 $username = $orgid->organisationId->identifier;
                 $this->info('    '.$username);
                 $aduser = User::where('sAMAccountName', $username)->first();
@@ -60,11 +60,13 @@ class FrejaPurgeOldOrgIds extends Command
                     continue;
                 }
 
-                if(!$aduser->groups()->exists($orgGroup)) {
+                //Removing this for the time being, it made the script accidentally
+                //remove org-ids for municipalities with multiple groups
+                /*if(!$aduser->groups()->exists($orgGroup)) {
                     $this->info("        Finns inte i rätt kommun");
                     $this->removeOrgId($username, $organization);
                     continue;
-                }
+                }*/
 
                 $uac = new AccountControl(
                     $aduser->getFirstAttribute('userAccountControl')
@@ -76,7 +78,7 @@ class FrejaPurgeOldOrgIds extends Command
                     continue;
                 }
 
-            }*/
+            }
         }
 
         return Command::SUCCESS;
