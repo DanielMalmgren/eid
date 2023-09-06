@@ -24,7 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('freja:purge')->daily()->environments(['prod']);
+        $schedule->command('freja:purge')->dailyAt("07:00")->environments(['prod']);
     }
 
     /**

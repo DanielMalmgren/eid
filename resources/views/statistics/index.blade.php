@@ -11,7 +11,11 @@
                 <div class="card-body">
 
                     @foreach($organizations as $name => $amount)
-                        {{$name}}: {{$amount}}<br>
+                        @if($user->isAdmin)
+                            <a href="statistics/{{$name}}">{{$name}}</a>: {{$amount}}<br>
+                        @else
+                            {{$name}}: {{$amount}}<br>
+                        @endif
                     @endforeach
                     <p class="font-weight-bold">
                         Totalt: {{$organizations->sum()}}
@@ -22,14 +26,5 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-
-    function fiat() {
-        var username=document.getElementById("username").value;
-        window.location='/fiat/'+username;
-    }
-
-</script>
 
 @endsection

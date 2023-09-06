@@ -31,8 +31,26 @@ class StatisticsController extends Controller
 
         $data = [
             'organizations' => $organizations,
+            'user' => session()->get('user'),
         ];
 
         return view('statistics.index')->with($data);
+    }
+
+    public function listusers(Request $request, String $municipality) {
+        $user = session()->get('user');
+        if(!$user->isAdmin) {
+            abort(403);
+        }
+
+        $orgids = $this->getOrgidsPerOrganization($municipality);
+
+        $data = [
+            'municipality' => $municipality,
+            'orgids' => $orgids,
+            'count' => count($orgids),
+        ];
+
+        return view('statistics.listusers')->with($data);
     }
 }

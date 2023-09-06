@@ -29,3 +29,4 @@ Route::get('/fiat/eIdStartAuth/{targetuser}',   'FiatController@eIdStartAuth');
 Route::get('/fiat/eIdAuthResult/{authRef}',     'FiatController@eIdAuthResult');
 
 Route::get('/statistics',                       'StatisticsController@index');
+Route::get('/statistics/{organization}',        'StatisticsController@listusers');
