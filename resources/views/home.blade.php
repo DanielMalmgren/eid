@@ -67,7 +67,7 @@
                                         <label>Titel:</label>
                                     </div>
                                     <div class="col-4">
-                                        <input required minlength="5" name="title" maxlength="22" class="form-control form-control-sm" value="{{$asuser->title}}">
+                                        <input required minlength="5" name="title" maxlength="63" class="form-control form-control-sm" value="{{$asuser->title}}">
                                     </div>
                                 </div>
                             @else

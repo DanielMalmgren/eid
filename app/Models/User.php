@@ -22,7 +22,7 @@ class User
             $this->name = $aduser->displayName[0];
 
             if(isset($aduser->title)) {
-                $this->title = mb_substr($aduser->title[0], 0, 22);
+                $this->title = mb_substr($aduser->title[0], 0, 63);
             } else {
                 $this->title = "Fel på titel";
                 logger("Missing title for user ".$username);
