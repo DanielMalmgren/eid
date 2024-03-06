@@ -152,10 +152,19 @@ trait FrejaAPI {
         $userInfo = array("country"=>"SE", "ssn"=>$user->personid);
         $userInfoB64 = base64_encode(json_encode($userInfo));
 
+        $eppnArray = array(
+            "key" => "eduPersonPrincipalName",
+            "displayText" => "Federationsanvändarnamn (EPPN)",
+            "value" => $user->eppn,
+        );
+
+        $additionalAttributesArray = array($eppnArray);
+
         $orgidArray = array(
             "title" => $user->title,
             "identifier" => $user->username,
-            "identifierName" => "Användarnamn"
+            "identifierName" => "Användarnamn",
+            "additionalAttributes" => $additionalAttributesArray,
         );
         $parameterArray = array(
             "userInfo" => $userInfoB64,

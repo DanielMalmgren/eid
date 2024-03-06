@@ -42,6 +42,7 @@
                             Ditt tjänste-ID kommer att få följande uppgifter:<br>
                             Namn: {{$asuser->name}}<br>
                             Användarnamn: {{$asuser->username}}<br>
+                            EPPN: {{$asuser->eppn}}<br>
 
                             @if (count($asuser->organizations) === 1)
                                 Kommun: {{$asuser->organizations[0]}}<br>

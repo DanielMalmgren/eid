@@ -16,7 +16,6 @@ class StatisticsController extends Controller
 
     public function index() {
         $organizations = collect([
-            'Kinda' => 0,
             'Boxholm' => 0,
             'Ödeshög' => 0,
             'Ydre' => 0,

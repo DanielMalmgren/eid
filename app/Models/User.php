@@ -11,6 +11,7 @@ class User
     public $organizations;
     public $personid;
     public $isAdmin;
+    public $eppn;
 
     public function __construct(String $username)
     {
@@ -30,6 +31,7 @@ class User
             //$this->organization = $aduser->company[0];
             $this->personid = $aduser->employeeID[0];
             $this->isAdmin = $aduser->groups()->recursive()->exists($adgroup);
+            $this->eppn = $aduser->employeeNumber[0];
 
             $this->organizations = [];
             $orgGroups  = json_decode(env('ORG_GROUPS'), true);
